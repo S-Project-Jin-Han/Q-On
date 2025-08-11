@@ -1,0 +1,37 @@
+name: push build output to personal repo for deployment
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Ruby and Mustache (to update the date)
+        run: |
+          sudo apt update
+          sudo apt install -y ruby-full
+          gem install mustache --user-install
+
+      - name: Build output
+        run: sh ./build.sh
+
+      - name: Pushes to personal repository
+        id: push_directory
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.PRIVATE_GITHUB_KEY }}
+        with:
+          source-directory: "output"
+          destination-github-username: ${{ secrets.PRIVATE_ACCOUNT_USERNAME }}
+          destination-repository-name: ${{ secrets.PRIVATE_ACCOUNT_REPONAME }}
+          user-email: ${{ secrets.PRIVATE_ACCOUNT_EMAIL }}
+          commit-message: ${{ github.event.commits[0].message }}
+          target-branch: develop
+
+      - name: Test get variable exported by push-to-another-repository
+        run: echo $DESTINATION_CLONED_DIRECTORY
