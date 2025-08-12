@@ -1,36 +1,177 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🥕 QR 출석 웹앱 기획안
 
-## Getting Started
+(고정 QR · 집계 중심 · 회차별 운영)  
+(1차 MVP **학원** 기준 작성)
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 📌 배경
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+여러 학원과 스터디에서 근퇴 기록을 수기 작성하여 불편이 발생하고 있음.  
+소규모 그룹 스터디의 경우도 근퇴 기록을 일일이 수기 작성하며 신뢰성이 하락하고, 스터디원 참여율이 감소하는 문제 발생.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚨 문제 인식
 
-## Learn More
+- **현장 출석 처리의 불편**  
+  직접 호명·수기 입력 등으로 진행이 지연되고 오류·누락·대리응답 등 부정까지 발생.  
+  → 실시간 집계 및 기록 관리가 어려움.
 
-To learn more about Next.js, take a look at the following resources:
+- **출석 집계의 비효율**  
+  종이·구글폼 기반은 집계가 늦고 오류가 잦으며, 실시간 현황 파악이 어려움.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **지각 기준의 일관성 부족**  
+  회차별(수업별) 시작·지각 기준이 구두로 관리되어 분쟁이 발생하고, 사후 정정에 시간이 소요됨.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🎯 서비스 목표
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+수기로 작성되는 학생들의 근퇴 기록 문제를 **QR + 위치 기반 웹 체크 서비스**로 해결.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🛠 MVP 설정
+
+1. **1차 MVP**
+
+   - 고정 QR 스캔 시 **열림 기간** 내 **1인 1회** 체크인만 허용.
+   - **지각 기준**에 따라 정상/지각을 자동 판정.
+   - **종료 시각에 퇴실 QR 체크아웃**을 진행하도록 요구,  
+     미진행 시 해당 회차는 **결석 처리**.
+   - **실시간 보드**로 집계.
+
+2. **2차 MVP**
+
+   - **위치 기반 검증** 추가.  
+     → Host가 지정한 **허용 반경(예: 50~100m)** 내에서만 체크인 가능.
+
+3. **3차 MVP**
+   - **푸시 알림(FCM)** 기능 추가.  
+     → 회차 OPEN 알림, 호스트 단체 공지(QR별 토픽 브로드캐스트).
+   - 실사용자 확보 후 피드백 수집 및 분석(Google Analytics, Microsoft Clarity, hotjar).
+
+---
+
+## 👥 사용자 분류
+
+### 관리자
+
+- **ADMIN** : 어플리케이션 관리자
+- **OWNER** : 세미 관리자 (HOST 반 할당, MEMBER 관리, 모든 통계 조회)
+
+### 사용자
+
+- **HOST** : 할당된 반(GROUP)에 대한 MEMBER 일부 관리(근퇴 수정) 및 통계 조회
+- **MEMBER** : 근퇴 기록 진행(입실·퇴실 QR 체크), 본인 근퇴 기록 조회
+
+---
+
+## 📖 용어 정의
+
+- **학원 : SPACE**
+- **반 : GROUP**
+- **수업 : CLASS**
+
+---
+
+## 🔄 운영 플로우(상세)
+
+1. CLASS 시작 시각 및 지각 기준을 기준으로 상태를 **활성**으로 전환.
+2. HOST는 GROUP별 QR 태그 가능 시각, 지각 기준을 지정.  
+   (예: 16:50부터 가능, 17:05 이후는 지각 처리)
+3. MEMBER는 다음 절차를 진행:
+   - **입실 QR 체크인**: 활성 CLASS 기간 내 스캔
+   - **퇴실 QR 체크아웃**: 지정된 CLASS 종료 시각에 맞춰 진행  
+     (미진행 시 해당 회차는 **결석 처리**)
+4. 판정 기준:
+   - 입실 지각 기준 전 → **출석**
+   - 입실 지각 기준 후 → **지각**
+   - 종료 시각 이후 퇴실 미진행 → **결석**
+5. 동일 회차 내 중복 체크인·체크아웃 차단.
+
+---
+
+## 📊 GROUP 근퇴 테이블(실시간 집계)
+
+- **상단 카드**: 총 체크인 수, 정상 수, 지각 수, 결석 수, 지각률(%)
+- **개인별 통계 조회**: MEMBER가 확인할 수 있는 개인 근퇴 조회 페이지 재사용
+- **최근 목록**: 최신순 50명(이름/시각/상태/GROUP)
+- **검색/정렬/필터**: 이름 검색, 시각·상태 정렬, GROUP 필터
+- **회차 히스토리**: 최근 N회 집계 요약(총원, 지각률, 피크 시간대)
+
+---
+
+## 📱 PWA 도입
+
+- 스마트폰 홈 화면 바로가기 기능으로 즉시 QR 태그 가능하도록 구현.
+
+---
+
+## 🔄 갱신 정책
+
+- 어드민 통계 페이지: 최신 데이터 풀링
+- 조회 시 **마지막 갱신 시각(KST)** 표기
+- 서버/클라이언트 모두 캐시 미사용
+
+---
+
+## 💬 안내 문구 예시
+
+- 열기 전 스캔: `아직 출석이 열리지 않았습니다.`
+- 종료 후: `이번 회차 출석이 종료되었습니다.`
+- 정상: `출석이 완료되었습니다. 상태: 정상`
+- 지각: `출석이 완료되었습니다. 상태: 지각`
+- 퇴실 미진행: `퇴실 체크가 완료되지 않아 결석 처리되었습니다.`
+- 중복: `이미 출석을 완료하셨습니다.`
+- 권한 없음: `해당 QR 관리 권한이 없습니다.`
+
+---
+
+## 📢 (2차 MVP) 푸시 알림(FCM)
+
+- **목적**: CLASS 시작·종료 알림, 공지 전달
+- **방식**: QR별 토픽 구독(`qr.{qrId}`)
+- **사용자 제어**: 알림 받기/해지, 조용 시간 옵션
+- **예외**: 권한 거부 시 앱 내 배너로 대체
+- **운영**: 발송·클릭률 모니터링, 실패 토큰 정리
+
+---
+
+## ⚠️ 예외·엣지 케이스
+
+- 열림 기간 중 수동 종료 시 즉시 신규 체크인 차단, 보드 읽기 전용
+- 서버 시간: UTC / 화면 시간: Asia/Seoul
+- 네트워크 실패 시 재시도 버튼 제공
+- 대량 유입 시 새로고침 쿨다운(2초) + 레이트 리밋 안내
+
+---
+
+## 🔐 보안·개인정보
+
+- 로그인 필수(카카오)
+- 최소 정보 수집(이름, 식별자)
+- 회차·QR은 호스트만 관리 가능
+- 비정상 시도는 감사 로그로 보관
+- (2차 MVP) FCM 토큰 최소 저장, 암호화 전송, 수신 철회 시 즉시 삭제
+
+---
+
+## ✅ 출시 체크리스트
+
+- 열기/닫기, 판정 규칙 QA(경계값 포함)
+- 입실/퇴실 QR 처리 QA 및 결석 판정 로직 검증
+- 동시 100명 부하 테스트
+- 모바일 카메라 권한 안내, iOS/Android 호환성 검증
+- 시간대 표기 일관성 확인
+- (2차 MVP) 푸시 권한 플로우, 중복 발송 방지 로직, 알림 딥링크 QA
+
+---
+
+## 📌 버전 로드맵
+
+- **1차 MVP**: 고정 QR, 실시간 집계 보드, 입실·퇴실 QR 기반 출석/결석 판정
+- **2차 MVP**: 위치 기반 검증
+- **3차 MVP**: FCM 푸시 알림
+- **3차 완료 이후**: 사용자 확보, 피드백 분석, UI/UX 개선
