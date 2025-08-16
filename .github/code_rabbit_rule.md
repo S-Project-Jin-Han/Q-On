@@ -8,27 +8,38 @@ This document provides AI and CodeRabbit review guidelines for maintaining consi
 
 ## 🏗️ Architecture and Directory Structure
 
-### Required Directory Structure
+### Required Directory Structure (Next.js App Router)
 
 ```bash
 src/
+├── app/
+│   ├── (auth)/        # Route groups
+│   │   ├── login/
+│   │   └── register/
+│   ├── api/           # API Routes
+│   │   └── [feature]/
+│   │       └── route.ts
+│   ├── [feature]/     # Dynamic routes
+│   ├── globals.css
+│   ├── layout.tsx     # Root layout
+│   └── page.tsx       # Home page
 ├── features/[feature-name]/
-│   ├── components/     # Feature-specific UI components
-│   ├── api/           # Feature-specific API (endpoints.ts, types.ts, [feature]Api.ts, mockData.ts)
-│   ├── hooks/         # useQuery, useMutation hooks
-│   ├── store/         # Zustand state (feature-level)
+│   ├── components/    # Feature-specific UI components
+│   ├── api/          # Client-side API (endpoints.ts, types.ts, [feature]Api.ts, mockData.ts)
+│   ├── hooks/        # useQuery, useMutation hooks
+│   ├── store/        # Zustand state (feature-level)
 │   └── [feature].types.ts
 ├── shared/
-│   ├── components/    # Common UI (Atomic Design)
-│   ├── hooks/         # Common hooks
-│   ├── store/         # Global state
-│   ├── lib/           # axios client, query configuration
+│   ├── components/   # Common UI (Atomic Design)
+│   ├── hooks/        # Common hooks
+│   ├── store/        # Global state
+│   ├── lib/          # axios client, query configuration
 │   ├── constants/
 │   ├── types/
 │   ├── styles/
-│   ├── api/           # Common API client
-│   └── msw/handlers/  # MSW handlers
-├── pages/             # Route pages
+│   ├── api/          # Common API client
+│   └── msw/handlers/ # MSW handlers
+├── public/           # Static assets
 └── tests/
 ```
 
@@ -36,7 +47,9 @@ src/
 
 - [ ] Feature folders follow `features/[feature-name]/` structure?
 - [ ] Common components are located in `shared/components/`?
-- [ ] API files are in correct locations?
+- [ ] API routes are in `src/app/api/` directory?
+- [ ] Pages are in `src/app/` directory following App Router structure?
+- [ ] Client-side API files are in correct feature directories?
 
 ---
 
@@ -44,12 +57,14 @@ src/
 
 ### File Names
 
-| Type             | Rule       | Example                            | Checkpoint                             |
-| ---------------- | ---------- | ---------------------------------- | -------------------------------------- |
-| Components/Pages | PascalCase | `LoginPage.tsx`, `UserCard.tsx`    | First letter uppercase, clear meaning  |
-| Hooks/Utils/API  | camelCase  | `useUserQuery.ts`, `formatDate.ts` | Lowercase start, verb+noun combination |
-| Images/Assets    | kebab-case | `user-avatar.png`, `logo-icon.svg` | Hyphen connection, lowercase           |
-| Folders          | snake_case | `search_input`, `user_profile`     | Underscore connection                  |
+| Type             | Rule       | Example                                 | Checkpoint                             |
+| ---------------- | ---------- | --------------------------------------- | -------------------------------------- |
+| Components/Pages | PascalCase | `LoginPage.tsx`, `UserCard.tsx`         | First letter uppercase, clear meaning  |
+| Next.js Pages    | lowercase  | `page.tsx`, `layout.tsx`, `loading.tsx` | Next.js reserved names                 |
+| API Routes       | lowercase  | `route.ts`                              | Next.js API route file                 |
+| Hooks/Utils/API  | camelCase  | `useUserQuery.ts`, `formatDate.ts`      | Lowercase start, verb+noun combination |
+| Images/Assets    | kebab-case | `user-avatar.png`, `logo-icon.svg`      | Hyphen connection, lowercase           |
+| Folders          | kebab-case | `user-profile`, `search-input`          | Hyphen connection, lowercase           |
 
 ### Function Names
 
@@ -146,7 +161,27 @@ const result = isEven ? (count >= 10 ? 'Even 10+' : 'Even <10') : 'Odd';
 
 ---
 
-## 📚 JSDoc Documentation Guidelines (Recommended)
+## 📚 JSDoc Documentation Guidelines (Required for Components & API Routes)
+
+### API Route Handler JSDoc Template (Required)
+
+````typescript
+/**
+ * Handles user authentication
+ * @param request - Next.js request object
+ * @returns Response with user data or error
+ * @throws {Error} - Authentication failed
+ * @example
+ * ```
+ * POST /api/auth/login
+ * Body: { email: string, password: string }
+ * Response: { user: User, token: string }
+ * ```
+ */
+export async function POST(request: Request) {
+  // implementation
+}
+````
 
 ### Function JSDoc Template
 
@@ -168,7 +203,7 @@ const loginUser = async (credentials: LoginCredentials): Promise<User> => {
 };
 ````
 
-### Component JSDoc Template
+### Component JSDoc Template (Required)
 
 ````typescript
 /**
@@ -198,6 +233,32 @@ const UserCard: React.FC<UserCardProps> = ({ user, onClick, className }) => {
 };
 ````
 
+### Page Component JSDoc Template (Required)
+
+````typescript
+/**
+ * User profile page
+ * @param params - Route parameters
+ * @param params.userId - User ID from URL
+ * @param searchParams - URL search parameters
+ * @returns JSX.Element
+ * @example
+ * ```
+ * URL: /user/123?tab=settings
+ * params: { userId: '123' }
+ * searchParams: { tab: 'settings' }
+ * ```
+ */
+interface UserPageProps {
+  params: { userId: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
+export default function UserPage({ params, searchParams }: UserPageProps) {
+  // implementation
+}
+````
+
 ### Hook JSDoc Template
 
 ````typescript
@@ -225,21 +286,21 @@ const useAuth = () => {
 ### 브랜치 네이밍
 
 ```bash
-# 패턴: [유형]/[JIRA-키]-[간단한-설명]
-feature/UHYU-123-user-login-form
-fix/UHYU-124-button-styling-issue
-refactor/UHYU-125-api-layer-cleanup
-chore/UHYU-126-eslint-setup
+# 패턴: [유형]/[#이슈번호]-[간단한-설명]
+feature/#13-user-login-form
+fix/#14-button-styling-issue
+refactor/#15-api-layer-cleanup
+chore/#16-eslint-setup
 ```
 
 ### 커밋 메시지
 
 ```bash
-# 패턴: [JIRA-키] [유형]: [설명]
-[UHYU-123] feat: 사용자 로그인 폼 구현
-[UHYU-124] fix: 버튼 스타일링 이슈 수정
-[UHYU-125] refactor: API 레이어 구조 개선
-[UHYU-126] chore: ESLint 설정 추가
+# 패턴: [#이슈번호] [유형]: [설명]
+#13 feat: 사용자 로그인 폼 구현
+#14 fix: 버튼 스타일링 이슈 수정
+#15 refactor: API 레이어 구조 개선
+#16 chore: ESLint 설정 추가
 ```
 
 ---
@@ -317,7 +378,9 @@ export const userHandlers = [
 
 ### Code Quality Verification
 
-- [ ] JSDoc documentation is provided for complex functions/components (recommended)
+- [ ] JSDoc documentation is provided for ALL components and API routes (required)
+- [ ] Page components have proper JSDoc with params and searchParams documentation
+- [ ] API route handlers have proper JSDoc with request/response documentation
 - [ ] Naming conventions are followed consistently
 - [ ] Depth limitation (max 2 levels) is maintained
 - [ ] TypeScript types are properly defined
@@ -341,11 +404,13 @@ export const userHandlers = [
 
 The following issues **MUST be flagged for correction**:
 
-1. **Incorrect File Structure** - Not following features/shared directory structure
-2. **3+ Level Nesting** - Conditional/loop depth exceeding 2 levels
-3. **Wrong File Location** - Files not placed in appropriate features/shared directories
-4. **Naming Convention Violations** - Not following handle*, use*, is\* patterns
-5. **Missing MSW Error Cases** - Handlers with only success scenarios
-6. **Missing JIRA Keys** - Branch names and commits without JIRA issue keys
+1. **Incorrect File Structure** - Not following Next.js App Router or features/shared directory structure
+2. **Missing JSDoc** - Components or API routes without proper JSDoc documentation
+3. **3+ Level Nesting** - Conditional/loop depth exceeding 2 levels
+4. **Wrong File Location** - Files not placed in appropriate app/, features/, or shared directories
+5. **Naming Convention Violations** - Not following handle*, use*, is\* patterns or Next.js conventions
+6. **Missing MSW Error Cases** - Handlers with only success scenarios
+7. **Missing JIRA Keys** - Branch names and commits without JIRA issue keys
+8. **Incorrect API Route Structure** - API routes not following `/api/[feature]/route.ts` pattern
 
-**Note**: JSDoc is recommended but not mandatory. Flag only if existing JSDoc is incorrect or incomplete.
+**Note**: JSDoc is now mandatory for all components and API routes. Code reviews must verify proper documentation exists.
