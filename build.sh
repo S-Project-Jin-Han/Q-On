@@ -1,5 +1,4 @@
 #!/bin/sh
-cd ../
-mkdir output
-cp -R ./QOn/* ./output
-cp -R ./output ./QOn/
+# 항상 저장소 루트에서 실행
+mkdir -p output
+cp -R ./Q-On/* ./output/
