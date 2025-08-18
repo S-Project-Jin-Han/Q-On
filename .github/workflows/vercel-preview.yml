@@ -8,6 +8,7 @@ jobs:
   vercel-build:
     if: github.repository == 'S-Project-Jin-Han/Q-On'
     runs-on: ubuntu-latest
+    environment: Deploy
     steps:
       - uses: actions/checkout@v4
 
