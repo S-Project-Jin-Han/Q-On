@@ -5,7 +5,7 @@ import { supabaseBrowser } from '@/shared/lib/supabase/supabase-browser';
 
 /**
  * Kakao OAuth login button 컴포넌트
- * @returns JSX.Element - Kakao login button with official styling
+ * @returns JSX.Element - 카카오 로그인 버튼
  * @example
  * ```tsx
  * <KakaoLoginButton />
@@ -19,15 +19,15 @@ export default function KakaoLoginButton() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'kakao',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}/api/auth/callback`,
         },
       });
 
       if (error) {
-        console.error('Kakao login error:', error.message);
+        console.error('카카오 로그인 중 에러', error.message);
       }
     } catch (error) {
-      console.error('Unexpected error during Kakao login:', error);
+      console.error('카카오 로그인 중 에러', error);
     }
   };
 
