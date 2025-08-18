@@ -1,15 +1,78 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model QR {
+  id        Int      @id @default(autoincrement())
+  hostId    Int
+  code      String?
+  isActive  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  host    profiles @relation(fields: [hostId], references: [id])
+  classes classes[]
+
+  @@unique([id, hostId])
+}
+
+model classes {
+  id              Int       @id @default(autoincrement())
+  qrId            Int
+  startTime       DateTime? @map("start_time")
+  progressMinutes Int?
+  preopenMinutes  Int?
+  lateMinutes     Int?
+  expiredMinutes  Int?
+  createdAt       DateTime  @default(now())
+
+  qr        QR         @relation(fields: [qrId], references: [id])
+  check_ins check_ins[]
+}
+
+model check_ins {
+  id         Int      @id @default(autoincrement())
+  classDate  DateTime
+  userId     Int
+  classId    Int
+  startedAt  DateTime?
+  endedAt    DateTime?
+  state      State?
+  is_checked Boolean  @default(false)
+
+  user    profiles @relation(fields: [userId], references: [id])
+  classes classes  @relation(fields: [classId], references: [id])
+
+  @@unique([id, classDate, userId, classId])
+}
+
+model profiles {
+  id          Int       @id @default(autoincrement())
+  kakaoId     String?   @unique
+  name        String?
+  role        Role?
+  createdAt   DateTime  @default(now())
+  isOnboarding Boolean
+
+  qrs       QR[]
+  check_ins check_ins[]
+  refreshes refresh[]
+}
+
+enum State {
+  ON_TIME
+  LATE
+  EARLY_LEAVE
+  ABSENT
+}
+
+enum Role {
+  ADMIN
+  OWNER
+  HOST
+  MEMBER
 }
