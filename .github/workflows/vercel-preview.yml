@@ -1,0 +1,46 @@
+name: Vercel Build Test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  vercel-build:
+    if: github.repository == 'S-Project-Jin-Han/Q-On'
+    runs-on: ubuntu-latest
+    environment: Deploy
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      # 🔗 여기서 .vercel/project.json 생성 (slug 사용)
+      - name: Link Vercel project
+        run: vercel link --yes --project="$VERCEL_PROJECT_SLUG" --scope="$VERCEL_TEAM_SLUG" --token="$VERCEL_TOKEN"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_TEAM_SLUG: ${{ secrets.VERCEL_TEAM_SLUG }}
+          VERCEL_PROJECT_SLUG: ${{ secrets.VERCEL_PROJECT_SLUG }}
+
+      - name: Pull Vercel Environment Info (preview)
+        run: vercel pull --yes --environment=preview --token="$VERCEL_TOKEN"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Vercel Build (preview)
+        run: vercel build --token="$VERCEL_TOKEN"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build output listing (for debugging)
+        if: always()
+        run: ls -al .vercel/output || echo "No build output found"

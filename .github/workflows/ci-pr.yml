@@ -1,0 +1,22 @@
+name: CI (PR)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened] # 모든 브랜치의 PR 대상
+
+jobs:
+  build:
+    name: Build & Verify
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Ruby and Mustache (to update the date)
+        run: |
+          sudo apt update
+          sudo apt install -y ruby-full
+          gem install mustache --user-install
+
+      - name: Build output
+        run: sh ./build.sh
