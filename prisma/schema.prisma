@@ -60,7 +60,6 @@ model profiles {
 
   qrs       QR[]
   check_ins check_ins[]
-  refreshes refresh[]
 }
 
 enum State {
