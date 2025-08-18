@@ -63,16 +63,6 @@ model profiles {
   refreshes refresh[]
 }
 
-model refresh {
-  id      Int    @id @default(autoincrement())
-  userId  Int
-  refresh String?
-
-  user profiles @relation(fields: [userId], references: [id])
-
-  @@unique([id, userId])
-}
-
 enum State {
   ON_TIME
   LATE
