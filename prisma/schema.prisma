@@ -53,7 +53,7 @@ model checkIns {
 
 model profiles {
   id          Int       @id @default(autoincrement())
-  uuid        String?   @unique
+  uuid        String    @unique @db.Uuid
   name        String?
   role        Role?
   createdAt   DateTime  @default(now())
