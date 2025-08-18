@@ -1,6 +1,8 @@
 <!-- PR 제목 #브랜치넘버 [컨벤션] 제목
 예시) #이슈번호 [Feat] 사용자 로그인 기능 구현 -->
 
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/S-Project-Jin-Han/Q-On?utm_source=oss&utm_medium=github&utm_campaign=S-Project-Jin-Han%2FQ-On&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
+
 # 주요 작업 내용 (전체 요약)
 
 <!-- 이 PR이 무엇에 관한 것인지 명확하고 간결하게 설명해주세요. -->

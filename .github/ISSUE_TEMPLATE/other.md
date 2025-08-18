@@ -1,7 +1,7 @@
 ---
 name: 기타 이슈
 about: 위의 템플릿에 맞지 않는 이슈에 대한 리포트를 작성해주세요
-title: '# [Chore]'
+title: '[Chore]'
 labels: 'question'
 assignees: ''
 ---

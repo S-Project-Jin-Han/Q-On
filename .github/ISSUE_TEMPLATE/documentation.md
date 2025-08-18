@@ -1,7 +1,7 @@
 ---
 name: 문서
 about: 프로젝트 문서 개선에 도움을 주세요
-title: '# [Docs] '
+title: '[Docs] '
 labels: 'documentation'
 assignees: ''
 ---
