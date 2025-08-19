@@ -1,4 +1,3 @@
-// app/api/profiles/route.ts
 export const runtime = "nodejs";
 
 import { NextResponse, type NextRequest } from "next/server";

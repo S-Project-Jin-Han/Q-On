@@ -1,4 +1,3 @@
-// src/lib/api-response.ts
 import type {
   PostgrestResponse,
   PostgrestSingleResponse,
