@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseServer } from '@/shared/lib/supabase/supabase-server';
+import { supabaseServerClient } from '@/shared/lib/supabase/supabase-server';
 
 /**
  * OAuth 콜백 라우트 핸들러
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get('code');
 
   if (code) {
-    const supabase = await supabaseServer();
+    const supabase = await supabaseServerClient();
 
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
