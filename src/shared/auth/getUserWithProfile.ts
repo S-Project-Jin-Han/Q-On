@@ -13,36 +13,18 @@ export type SessionUser = {
 };
 
 /**
- * Next.js 서버 측에서 RLS기반 profiles 테이블과 Supabase Auth API 데이터를 조합한 유저정보를 반환합니다.
- * 유저 정보는 다음과 같습니다.
- *
- * - uuid: 유저 고유 ID
- * - email: 유저 이메일
- * - name: 유저 이름
- * - avatarUrl: 유저 프로필 이미지 URL
- * - role: 유저 역할
- * - isOnboarding: 유저 온보딩 여부
- * - createdAt: 유저 생성일
- *
- * 비로그인 상태일 경우 { kind: 'guest' }를 반환합니다.
- *
- * @returns 유저 정보
+ * Next.js 서버에서 세션 사용자(auth.user) + RLS 기반 profiles를 조합해 유저 정보를 반환합니다.
+ * 비로그인 상태일 경우 "게스트용 안전 폴백"을 반환합니다(빈 uuid, role=MEMBER, isOnboarding=false).
  */
 export async function getUserWithProfile(): Promise<SessionUser> {
   const supabase = await supabaseServerClient();
 
-  const { data: u } = await supabase.auth.getUser();
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('uuid, role, "isOnboarding", "createdAt", email, "displayName", "avatarUrl", name')
-    .eq('uuid', u?.user?.id)
-    .single();
-
-  if (!profile) {
+  // 1) 세션 확인 (비로그인 조기 반환)
+  const { data: u, error: authErr } = await supabase.auth.getUser();
+  if (authErr || !u?.user) {
     return {
-      uuid: u?.user?.id ?? '',
-      email: u?.user?.email ?? '',
+      uuid: '',
+      email: undefined,
       name: null,
       avatarUrl: null,
       role: 'MEMBER',
@@ -50,12 +32,37 @@ export async function getUserWithProfile(): Promise<SessionUser> {
     };
   }
 
+  const userId = u.user.id;
+  const authEmail = u.user.email ?? undefined;
+
+  // 2) 본인 프로필 조회 (RLS 하)
+  const { data: profile, error: profErr } = await supabase
+    .from('profiles')
+    .select('uuid, role, "isOnboarding", "createdAt", email, "displayName", "avatarUrl", name')
+    .eq('uuid', userId)
+    .single();
+
+  // 3) 에러/미존재 → 안전 폴백
+  if (profErr || !profile) {
+    // 필요 시 서버 로깅: console.error("profiles fetch error:", profErr);
+    return {
+      uuid: userId,
+      email: authEmail,
+      name: null,
+      avatarUrl: null,
+      role: 'MEMBER',
+      isOnboarding: false,
+    };
+  }
+
+  // 4) 병합 + 정규화
+  const role = (profile.role ?? 'MEMBER') as Role;
   return {
     uuid: profile.uuid,
-    email: profile.email ?? u?.user?.email ?? '',
+    email: profile.email ?? authEmail,
     name: profile.displayName ?? profile.name ?? null,
     avatarUrl: profile.avatarUrl ?? null,
-    role: (profile.role ?? 'MEMBER') as Role,
+    role,
     isOnboarding: !!profile.isOnboarding,
     createdAt: profile.createdAt ?? undefined,
   };
