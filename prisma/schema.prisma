@@ -23,43 +23,44 @@ model QR {
 model classes {
   id              Int       @id @default(autoincrement())
   qrId            Int
-  startTime       DateTime? @map("start_time")
+  startTime       DateTime?
   progressMinutes Int?
   preopenMinutes  Int?
   lateMinutes     Int?
   expiredMinutes  Int?
   createdAt       DateTime  @default(now())
 
-  qr        QR         @relation(fields: [qrId], references: [id])
-  check_ins check_ins[]
+  qr       QR        @relation(fields: [qrId], references: [id])
+  checkIns checkIns[]
 }
 
-model check_ins {
-  id         Int      @id @default(autoincrement())
-  classDate  DateTime
-  userId     Int
-  classId    Int
-  startedAt  DateTime?
-  endedAt    DateTime?
-  state      State?
-  is_checked Boolean  @default(false)
+model checkIns {
+  id        Int       @id @default(autoincrement())
+  classDate DateTime
+  userId    Int
+  classId   Int
+  startedAt DateTime?
+  endedAt   DateTime?
+  state     State?
+  isChecked Boolean   @default(false)
 
   user    profiles @relation(fields: [userId], references: [id])
   classes classes  @relation(fields: [classId], references: [id])
 
   @@unique([id, classDate, userId, classId])
+  @@map("check_ins")
 }
 
 model profiles {
   id          Int       @id @default(autoincrement())
-  kakaoId     String?   @unique
+  uuid        String    @unique @db.Uuid
   name        String?
   role        Role?
   createdAt   DateTime  @default(now())
   isOnboarding Boolean
 
-  qrs       QR[]
-  check_ins check_ins[]
+  qrs      QR[]
+  checkIns checkIns[]
 }
 
 enum State {
