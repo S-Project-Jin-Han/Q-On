@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { createServerClient } from '@supabase/ssr';
+import { supabaseServer } from '@/shared/lib/supabase/supabase-server';
 
 /**
  * OAuth 콜백 라우트 핸들러
@@ -20,27 +19,7 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get('code');
 
   if (code) {
-    const cookieStore = await cookies();
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll();
-          },
-          setAll(cookiesToSet) {
-            try {
-              cookiesToSet.forEach(({ name, value, options }) =>
-                cookieStore.set(name, value, options)
-              );
-            } catch {
-              // 에러 처리
-            }
-          },
-        },
-      }
-    );
+    const supabase = await supabaseServer();
 
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
