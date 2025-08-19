@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { toast } from "sonner";
 import { Toaster } from "./Sonner";
-import { toastVariants } from "./sonnerVariants";
+import { sonnerVariants } from "./sonnerVariants";
 
 const meta: Meta<typeof Toaster> = {
   title: "UI/Sonner",
@@ -23,7 +23,7 @@ const meta: Meta<typeof Toaster> = {
         <Toaster
           toastOptions={{
             classNames: {
-              toast: toastVariants({ type: "default" }),
+              toast: sonnerVariants({ type: "default" }),
             },
           }}
         />

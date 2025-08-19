@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { supabaseBrowser } from "@/shared/lib/supabase/supabase-browser";
+import { supabaseBrowser } from "@/shared/lib";
 
 /**
  * Kakao OAuth login button 컴포넌트

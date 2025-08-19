@@ -1,91 +1,87 @@
 import { cva } from "class-variance-authority";
 
-// Toast 메시지 variants
-export const toastVariants = cva("flex items-start gap-3 px-4 py-3 rounded-md border shadow-sm", {
-  variants: {
-    type: {
-      default: "bg-background text-foreground border-border",
-      success: "bg-green-100 text-green-800 border-green-300",
-      error: "bg-red-100 text-red-800 border-red-300",
-      warning: "bg-yellow-100 text-yellow-800 border-yellow-300",
-      info: "bg-blue-100 text-blue-800 border-blue-300",
-      loading: "text-blue-600 animate-spin",
+// Toast 본체
+export const sonnerVariants = cva(
+  "toast flex items-start gap-3 p-4 rounded-xl border shadow-md animate-in fade-in zoom-in-90",
+  {
+    variants: {
+      type: {
+        default: "bg-neutral-50 text-neutral-800 border-neutral-200",
+        success: "bg-emerald-50 text-emerald-800 border-emerald-200",
+        error: "bg-rose-50 text-rose-800 border-rose-200",
+        warning: "bg-amber-50 text-amber-800 border-amber-200",
+        info: "bg-sky-50 text-sky-800 border-sky-200",
+        loading: "bg-indigo-50 text-indigo-800 border-indigo-200",
+      },
+      size: {
+        sm: "text-sm",
+        md: "text-base",
+        lg: "text-lg",
+      },
     },
-    size: {
-      sm: "text-sm",
-      md: "text-base",
-      lg: "text-lg",
+    defaultVariants: {
+      type: "default",
+      size: "md",
     },
-  },
-  defaultVariants: {
-    type: "default",
-    size: "md",
-  },
-});
+  }
+);
 
-// Toast 액션 버튼 variants
+// 액션 버튼
 export const toastActionVariants = cva(
   "inline-flex items-center justify-center rounded-md font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
   {
     variants: {
       variant: {
-        primary: "bg-primary text-primary-foreground hover:bg-primary/90",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        danger: "bg-red-600 text-white hover:bg-red-700",
-        outline: "border border-input bg-transparent hover:bg-muted",
-        ghost: "bg-transparent hover:bg-muted",
+        vibrant: "bg-fuchsia-600 text-white hover:bg-fuchsia-700 active:scale-95",
+        mild: "bg-neutral-200 text-neutral-800 hover:bg-neutral-300 active:scale-95",
+        subtle:
+          "bg-transparent border border-neutral-300 text-neutral-700 hover:bg-neutral-100 active:scale-95",
       },
       size: {
-        sm: "h-8 px-2 text-xs",
-        md: "h-9 px-3 text-sm",
-        lg: "h-10 px-4 text-base",
+        sm: "h-8 px-3 text-xs",
+        md: "h-9 px-4 text-sm",
+        lg: "h-10 px-5 text-base",
       },
     },
     defaultVariants: {
-      variant: "primary",
+      variant: "vibrant",
       size: "md",
     },
   }
 );
 
-// Toast 닫기 버튼 variants
+// 닫기 버튼
 export const toastCloseVariants = cva(
-  "absolute right-2 top-2 rounded-sm text-muted-foreground transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+  "toast-close absolute right-2 top-2 p-1 text-neutral-400 hover:text-neutral-800 rounded-full transition-all duration-150 hover:rotate-90",
   {
     variants: {
-      variant: {
-        default: "hover:text-foreground hover:bg-muted/50",
-        ghost: "hover:text-foreground hover:bg-transparent",
-        subtle: "hover:text-foreground hover:bg-muted/30",
-      },
       size: {
         sm: "h-6 w-6",
-        md: "h-8 w-8",
-        lg: "h-10 w-10",
+        md: "h-7 w-7",
+        lg: "h-8 w-8",
       },
     },
     defaultVariants: {
-      variant: "default",
       size: "md",
     },
   }
 );
 
-// Toast 아이콘 variants
-export const toastIconVariants = cva("flex-shrink-0 self-start", {
+// 아이콘
+export const toastIconVariants = cva("toast-icon flex-shrink-0 self-start mt-0.5", {
   variants: {
     type: {
-      default: "text-muted-foreground",
-      success: "text-green-600",
-      error: "text-red-600",
-      warning: "text-yellow-600",
-      info: "text-blue-600",
-      loading: "text-blue-600 animate-spin",
+      default: "text-neutral-400",
+      success: "text-emerald-500",
+      error: "text-rose-500",
+      warning: "text-amber-500",
+      info: "text-sky-500",
+      loading: "text-indigo-500 animate-spin",
     },
     size: {
-      sm: "h-4 w-4 mt-0.5",
-      md: "h-5 w-5 mt-0.5",
-      lg: "h-6 w-6 mt-0.5",
+      sm: "h-4 w-4",
+      md: "h-5 w-5",
+      lg: "h-6 w-6",
     },
   },
   defaultVariants: {

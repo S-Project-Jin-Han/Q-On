@@ -41,7 +41,7 @@ export interface ToastAction {
 /* ===========================
    타입 유틸
 =========================== */
-export type ToastType = "default" | "success" | "error" | "warning" | "info" | "loading";
+export type ToastType = "default" | "success" | "error" | "warning" | "info";
 
 export type ToastPosition =
   | "top-left"
