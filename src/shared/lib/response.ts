@@ -145,7 +145,7 @@ export function supaResponse<T>(
 
   if (mapped.code === "NOT_FOUND" && opts?.notFoundAsEmpty) {
     return {
-      body: successResponse<[] | null>(Array.isArray(data) ? data : []),
+      body: successResponse<T[] | null>(Array.isArray(data) ? [] : null),
       httpStatus: 200,
     };
   }

@@ -6,6 +6,8 @@ on:
 
 jobs:
   build:
+    if: github.repository == 'S-Project-Jin-Han/Q-On'
+
     runs-on: ubuntu-latest
     environment: Deploy
 
