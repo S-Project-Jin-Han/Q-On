@@ -110,7 +110,7 @@ export function mapPostgrestErrorToCode(err: PostgrestError): {
  * PostgREST 응답을 ApiResponse로 변환
  * - 라우트에서는 반환 바디와 HTTP 상태를 함께 받아서 NextResponse로 감싸면 끝
  */
-export function supaResponse<T>(
+export function supabaseResponse<T>(
   result: PostgrestResponse<T> | PostgrestSingleResponse<T>,
   opts?: {
     pagination?: { page: number; size: number }; // count 기반 meta 자동 생성
@@ -170,7 +170,7 @@ export type AuthLikeResponse<TData> = {
 /**
  * Supabase Auth 응답을 ApiResponse로 변환
  */
-export function supaAuthResponse<TData>(
+export function supabaseAuthResponse<TData>(
   result: AuthLikeResponse<TData>,
   opts?: { messageOnSuccess?: string; maskErrorInProd?: boolean }
 ): { body: ApiResponse<TData | null>; httpStatus: number } {
