@@ -62,7 +62,7 @@ export async function middleware(req: NextRequest) {
       .eq('uuid', user.id)
       .single();
 
-    const role = (profile?.role ?? 'MEMBER') as Role;
+    const role = (profile?.role ?? undefined) as Role;
 
     if (profErr || !guard.roles.includes(role)) {
       const denied = req.nextUrl.clone();

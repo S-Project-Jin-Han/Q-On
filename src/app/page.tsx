@@ -13,7 +13,7 @@ export default function Home() {
         <h1>{user.avatarUrl || 'Guest'}</h1>
         <h1>{user.isLoggedIn ? 'Logged In' : 'Logged Out'}</h1>
         <h1>{user.isOnboarding ? 'Onboarding' : 'Not Onboarding'}</h1>
-        <h1>{user.role || 'Member'}</h1>
+        <h1>{user.role || 'undefined'}</h1>
         <h1>{user.createdAt || 'Guest'}</h1>
       </main>
     </div>

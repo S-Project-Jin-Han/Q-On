@@ -29,7 +29,7 @@ export async function getUserWithProfile(): Promise<SessionUser> {
       email: undefined,
       name: null,
       avatarUrl: null,
-      role: 'MEMBER',
+      role: undefined,
       isOnboarding: true,
     };
   }
@@ -51,13 +51,14 @@ export async function getUserWithProfile(): Promise<SessionUser> {
       email: undefined,
       name: null,
       avatarUrl: null,
-      role: 'MEMBER',
+      role: undefined,
       isOnboarding: false,
     };
   }
 
   // 4) 병합 + 정규화
-  const role = (profile.role ?? 'MEMBER') as Role;
+  const role = (profile.role ?? undefined) as Role;
+
   return {
     isLoggedIn: true,
     uuid: profile.uuid,
