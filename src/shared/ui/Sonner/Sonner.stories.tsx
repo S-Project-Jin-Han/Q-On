@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { toast } from "sonner";
 import { Toaster } from "./Sonner";
-import { sonnerVariants } from "./sonnerVariants";
 
 const meta: Meta<typeof Toaster> = {
   title: "UI/Sonner",
@@ -20,13 +19,7 @@ const meta: Meta<typeof Toaster> = {
     (Story) => (
       <div>
         <Story />
-        <Toaster
-          toastOptions={{
-            classNames: {
-              toast: sonnerVariants({ type: "default" }),
-            },
-          }}
-        />
+        <Toaster />
       </div>
     ),
   ],
@@ -48,41 +41,25 @@ export const Playground: Story = {
         </button>
         <button
           className="rounded-md border bg-green-100 px-4 py-2 hover:bg-green-200"
-          onClick={() =>
-            toast.success("성공 메시지입니다!", {
-              description: new Date().toLocaleString(),
-            })
-          }
+          onClick={() => toast.success("성공 메시지입니다!")}
         >
           성공
         </button>
         <button
           className="rounded-md border bg-red-100 px-4 py-2 hover:bg-red-200"
-          onClick={() =>
-            toast.error("에러 메시지입니다.", {
-              description: "문제가 발생했어요.",
-            })
-          }
+          onClick={() => toast.error("에러 메시지입니다.")}
         >
           에러
         </button>
         <button
           className="rounded-md border bg-yellow-100 px-4 py-2 hover:bg-yellow-200"
-          onClick={() =>
-            toast.warning("경고 메시지입니다.", {
-              description: "확인해 주세요.",
-            })
-          }
+          onClick={() => toast.warning("경고 메시지입니다.")}
         >
           경고
         </button>
         <button
           className="rounded-md border bg-blue-100 px-4 py-2 hover:bg-blue-200"
-          onClick={() =>
-            toast.info("정보 메시지입니다.", {
-              description: "참고해 주세요.",
-            })
-          }
+          onClick={() => toast.info("정보 메시지입니다.")}
         >
           정보
         </button>

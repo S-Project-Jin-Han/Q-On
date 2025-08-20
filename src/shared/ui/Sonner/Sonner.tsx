@@ -7,12 +7,6 @@ interface CustomToasterProps extends Omit<ToasterProps, "theme"> {
   className?: string;
 }
 
-const DEFAULT_STYLE = {
-  "--normal-bg": "var(--popover)",
-  "--normal-text": "var(--popover-foreground)",
-  "--normal-border": "var(--border)",
-} as Record<`--${string}`, string>;
-
 const Toaster = ({
   className,
   position = "bottom-center",
@@ -24,7 +18,6 @@ const Toaster = ({
   return (
     <Sonner
       className={cn(className)}
-      style={DEFAULT_STYLE}
       position={position}
       expand={expand}
       richColors={richColors}

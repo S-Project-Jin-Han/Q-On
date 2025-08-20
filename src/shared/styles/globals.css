@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --popover: var(--background);
+  --popover-foreground: var(--foreground);
+  --border: #e5e5e5;
 }
 
 @theme inline {
@@ -16,6 +19,9 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --popover: #171717;
+    --popover-foreground: #ededed;
+    --border: #262626;
   }
 }
 
