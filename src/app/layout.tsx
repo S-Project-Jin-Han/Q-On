@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@shared/styles/globals.css";
 import { Toaster } from "@shared/ui/Sonner";
-import "@shared/styles/globals.css";
 import { UserProvider } from "@/shared/provider/UserProvider";
 import { getUserWithProfile } from "@/shared/auth/getUserWithProfile";
 
