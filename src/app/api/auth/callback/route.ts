@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
 
       if (profileError || !profile) {
         // 프로필이 없거나 조회 실패 시 로그인 페이지로
-        return NextResponse.redirect(`${origin}/login`);
+        return NextResponse.redirect(`${origin}/login/onboarding`);
       }
 
       if (profile.isOnboarding) {
