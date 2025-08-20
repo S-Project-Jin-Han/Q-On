@@ -3,7 +3,7 @@ import type { Role } from './role';
 export type SessionUser = {
   isLoggedIn: boolean;
   uuid: string;
-  email?: string;
+  email?: string | null;
   name?: string | null;
   avatarUrl?: string | null;
   role: Role;

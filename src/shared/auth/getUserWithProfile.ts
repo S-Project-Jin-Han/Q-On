@@ -5,7 +5,7 @@ import type { SessionUser } from '@/shared/auth/types/sessionUser';
 
 /**
  * Next.js 서버에서 세션 사용자(auth.user) + RLS 기반 profiles를 조합해 유저 정보를 반환합니다.
- * 비로그인 상태일 경우 "게스트용 안전 폴백"을 반환합니다(빈 uuid, role=MEMBER, isOnboarding=false).
+ * 비로그인 상태일 경우 "게스트용 안전 폴백"을 반환합니다(빈 uuid, role=undefined, isOnboarding=false).
  */
 export async function getUserWithProfile(): Promise<SessionUser> {
   const supabase = await supabaseServerClient();
@@ -20,7 +20,7 @@ export async function getUserWithProfile(): Promise<SessionUser> {
       name: null,
       avatarUrl: null,
       role: undefined,
-      isOnboarding: true,
+      isOnboarding: false,
     };
   }
 
