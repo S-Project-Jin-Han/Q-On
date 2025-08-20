@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useMemo } from 'react';
-import type { SessionUser } from '@/shared/auth/getUserWithProfile';
+import type { SessionUser } from '@/shared/auth/types/sessionUser';
 
 type Ctx = { user: SessionUser };
 

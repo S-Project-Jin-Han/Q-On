@@ -1,17 +1,7 @@
 import 'server-only';
 import { supabaseServerClient } from '@/shared/lib/supabase/supabase-server';
 import { Role } from '@/shared/auth/types/role';
-
-export type SessionUser = {
-  isLoggedIn: boolean;
-  uuid: string;
-  email?: string;
-  name?: string | null;
-  avatarUrl?: string | null;
-  role: Role;
-  isOnboarding: boolean;
-  createdAt?: string;
-};
+import type { SessionUser } from '@/shared/auth/types/sessionUser';
 
 /**
  * Next.js 서버에서 세션 사용자(auth.user) + RLS 기반 profiles를 조합해 유저 정보를 반환합니다.
