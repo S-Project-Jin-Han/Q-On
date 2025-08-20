@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import type { Role } from '@/shared/auth/types/role';
+import { envServer } from '@/shared/lib/env.server';
 
 /** 공개 경로: 루트, 로그인, /public/** */
 const PUBLIC_PATHS = [/^\/$/, /^\/login$/, /^\/public(\/|$)/];
@@ -51,8 +52,8 @@ export async function middleware(req: NextRequest) {
 
   // 2) Supabase SSR 클라이언트 (anon 키만! Service Role 금지)
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    envServer.NEXT_PUBLIC_SUPABASE_URL!,
+    envServer.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         // 요청 쿠키 읽기
