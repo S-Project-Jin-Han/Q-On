@@ -1,7 +1,7 @@
 ---
 name: '🛠️ 리팩토링 (Refactoring)'
 title: '[REFACTOR] '
-labels: '리펙토링 Refactor'
+labels: '리팩토링 Refactor'
 assignees: ''
 ---
 
