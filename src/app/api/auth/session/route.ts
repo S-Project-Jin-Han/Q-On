@@ -1,13 +1,17 @@
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { supabaseServerClient } from '@/shared/lib/supabase/supabase-server';
 import { getUserWithProfile } from '@/shared/auth/getUserWithProfile'; // Import the updated function
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET() {
-  const cookieStore = cookies();
-  const supabase = await supabaseServerClient();
+  try {
+    const { supabaseUser, profile } = await getUserWithProfile();
 
-  const { supabaseUser, profile } = await getUserWithProfile();
-
-  return NextResponse.json({ user: supabaseUser, profile: profile });
+    return NextResponse.json(
+      { supabaseUser, profile },
+      { headers: { 'Cache-Control': 'no-store' } }
+    );
+  } catch {
+    return NextResponse.json({ error: 'internal_error' }, { status: 500 });
+  }
 }

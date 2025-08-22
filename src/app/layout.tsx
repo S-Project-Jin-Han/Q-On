@@ -2,8 +2,6 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import '@shared/styles/globals.css';
 import { Toaster } from '@shared/ui/Sonner';
-import { supabaseServerClient } from '@/shared/lib/supabase/supabase-server';
-// import type { SessionUser } from '@/shared/auth/types/sessionUser'; // No longer directly used here for initialUser
 import { AuthHydrator } from '@/shared/auth/AuthHydrator';
 import { getUserWithProfile } from '@/shared/auth/getUserWithProfile'; // Import the updated function
 import type { SessionUser } from '@/shared/auth/types/sessionUser';
@@ -27,7 +25,10 @@ export const metadata: Metadata = {
 };
 
 // Modify getInitialUser to use getUserWithProfile
-async function getInitialUser(): Promise<{ supabaseUser: SessionUser | null; profile: Profile | null }> {
+async function getInitialUser(): Promise<{
+  supabaseUser: SessionUser | null;
+  profile: Profile | null;
+}> {
   const { supabaseUser, profile } = await getUserWithProfile();
   return { supabaseUser, profile };
 }
