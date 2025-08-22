@@ -36,25 +36,33 @@ export function CustomIcon({
   // 1) 레지스트리 paths
   if (customName) {
     const reg = getCustomByName(customName);
-    const vb = reg.viewBox ?? '0 0 24 24';
-    const sw = strokeWidth ?? reg.strokeWidth ?? 1.5;
-    const arr = Array.isArray(reg.paths) ? reg.paths : [reg.paths];
+    if (!reg || !reg.paths) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(
+          `[Icon] customName "${customName}" not found in registry or has no paths.`
+        );
+      }
+    } else {
+      const vb = reg.viewBox ?? '0 0 24 24';
+      const sw = strokeWidth ?? reg.strokeWidth ?? 1.5;
+      const arr = Array.isArray(reg.paths) ? reg.paths : [reg.paths];
 
-    return (
-      <span className={classes} {...ariaProps} {...rest}>
-        {title ? <span className="sr-only">{title}</span> : null}
-        <svg
-          viewBox={vb}
-          className="block size-full"
-          fill="none"
-          stroke="currentColor"
-        >
-          {arr.map((d, i) => (
-            <path key={i} d={d} strokeWidth={sw} />
-          ))}
-        </svg>
-      </span>
-    );
+      return (
+        <span className={classes} {...ariaProps} {...rest}>
+          {title ? <span className="sr-only">{title}</span> : null}
+          <svg
+            viewBox={vb}
+            className="block size-full"
+            fill="none"
+            stroke="currentColor"
+          >
+            {arr.map((d, i) => (
+              <path key={i} d={d} strokeWidth={sw} />
+            ))}
+          </svg>
+        </span>
+      );
+    }
   }
 
   // 2) paths 직접 전달
@@ -82,15 +90,18 @@ export function CustomIcon({
 
   // 3) mask-image 방식: currentColor로 채워짐
   if (maskSrc) {
+    const { style: styleFromProps, ...restProps } =
+      (rest as { style?: React.CSSProperties }) ?? {};
     return (
       <span
         className={cn('icon-mask', classes)}
         style={{
+          ...(styleFromProps ?? {}),
           maskImage: `url(${maskSrc})`,
           WebkitMaskImage: `url(${maskSrc})`,
         }}
         {...ariaProps}
-        {...rest}
+        {...restProps}
       >
         {title ? <span className="sr-only">{title}</span> : null}
       </span>
