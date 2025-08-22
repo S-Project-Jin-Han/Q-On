@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { supabaseBrowser } from "@/shared/lib/supabase/supabase-browser";
+import Image from 'next/image';
+import { supabaseBrowser } from '@/shared/lib/supabase/supabase-browser';
 
 /**
  * Kakao OAuth login button 컴포넌트
@@ -17,17 +17,17 @@ export default function KakaoLoginButton() {
   const handleKakaoLogin = async () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: "kakao",
+        provider: 'kakao',
         options: {
           redirectTo: `${window.location.origin}/api/auth/callback`,
         },
       });
 
       if (error) {
-        console.error("카카오 로그인 중 에러", error.message);
+        console.error('카카오 로그인 중 에러', error.message);
       }
     } catch (error) {
-      console.error("카카오 로그인 중 에러", error);
+      console.error('카카오 로그인 중 에러', error);
     }
   };
 

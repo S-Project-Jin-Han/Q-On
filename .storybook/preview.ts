@@ -1,4 +1,5 @@
-import type { Preview } from "@storybook/nextjs-vite";
+import type { Preview } from '@storybook/nextjs-vite';
+import '../src/shared/styles/globals.css';
 
 const preview: Preview = {
   parameters: {
@@ -9,29 +10,27 @@ const preview: Preview = {
       },
     },
 
-    actions: { argTypesRegex: "^on[A-Z].*" },
-
     backgrounds: {
-      default: "light",
+      default: 'light',
       values: [
-        { name: "light", value: "#ffffff" },
-        { name: "dark", value: "#111827" },
+        { name: 'light', value: '#ffffff' },
+        { name: 'dark', value: '#111827' },
       ],
     },
 
     viewport: {
       viewports: {
         mobile: {
-          name: "Mobile",
-          styles: { width: "360px", height: "640px" },
+          name: 'Mobile',
+          styles: { width: '360px', height: '640px' },
         },
         tablet: {
-          name: "Tablet",
-          styles: { width: "768px", height: "1024px" },
+          name: 'Tablet',
+          styles: { width: '768px', height: '1024px' },
         },
         desktop: {
-          name: "Desktop",
-          styles: { width: "1280px", height: "800px" },
+          name: 'Desktop',
+          styles: { width: '1280px', height: '800px' },
         },
       },
     },
@@ -39,8 +38,8 @@ const preview: Preview = {
     a11y: {
       config: {
         rules: [
-          { id: "color-contrast", enabled: true },
-          { id: "label", enabled: true },
+          { id: 'color-contrast', enabled: true },
+          { id: 'label', enabled: true },
         ],
       },
       options: {},
@@ -49,12 +48,12 @@ const preview: Preview = {
 
   globalTypes: {
     theme: {
-      name: "Theme",
-      description: "Global theme for components",
-      defaultValue: "light",
+      name: 'Theme',
+      description: 'Global theme for components',
+      defaultValue: 'light',
       toolbar: {
-        icon: "circlehollow",
-        items: ["light", "dark", "system"],
+        icon: 'circlehollow',
+        items: ['light', 'dark', 'system'],
         showName: true,
       },
     },
