@@ -30,10 +30,10 @@ export default function SignOutButton({
 
     // 2) 서버 세션 폐기(쿠키/리프레시 토큰)
     try {
-      await fetch('/auth/signout', {
+      await fetch('/api/auth/signout', {
         method: 'POST',
         credentials: 'include',
-        headers: { 'x-scope': scope },
+        // headers: { 'x-scope': scope },
       });
     } catch {
       // 실패해도 다음 상호작용/재진입 시 /api/auth/session 으로 정합성 회복 가능
