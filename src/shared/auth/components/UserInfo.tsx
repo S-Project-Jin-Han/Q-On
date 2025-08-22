@@ -2,6 +2,8 @@
 
 import { useAuthStore } from '@/shared/store/authStore';
 import { useShallow } from 'zustand/react/shallow';
+import KakaoLoginButton from '@/shared/auth/components/KakaoLoginButton';
+import SignOutButton from '@/shared/auth/components/SignOutButton';
 
 export default function UserInfo() {
   const { profile, hydrated } = useAuthStore(
@@ -31,6 +33,7 @@ export default function UserInfo() {
         <h1>{u?.isOnboarding ? 'Onboarding' : 'Not Onboarding'}</h1>
         <h1>{u?.role ?? 'undefined'}</h1>
         <h1>{u?.createdAt ?? 'Guest'}</h1>
+        {isLoggedIn === false ? <KakaoLoginButton /> : <SignOutButton />}
       </main>
     </div>
   );
