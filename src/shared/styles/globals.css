@@ -75,8 +75,8 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   /* destructive 버튼 호버/액티브 색상 */
-  --color-error-hover: theme('colors.red.600');
-  --color-error-active: theme('colors.red.700');
+  --color-error-hover: #dc2626; /* red-600 */
+  --color-error-active: #b91c1c; /* red-700 */
 
   /* ============================
      Brand Primary(당근) 버튼용 토큰
@@ -208,6 +208,17 @@
 
   .shadow-carrot {
     box-shadow: 0 4px 14px 0 rgba(255, 127, 38, 0.39);
+  }
+
+  .icon-mask {
+    background-color: currentColor;
+    display: inline-block;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
   }
 }
 
