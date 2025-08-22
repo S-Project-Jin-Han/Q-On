@@ -1,29 +1,31 @@
 'use client';
 
 import { create } from 'zustand';
-import type { Role } from '@/shared/auth/types/role';
-
-export type SessionUser = {
-  id: string;
-  email: string | null;
-  name: string | null;
-  avatarUrl: string | null;
-  role?: Role;
-  provider?: string | null;
-};
+import type { SessionUser } from '@/shared/auth/types/sessionUser'; // This is now Supabase User
+import type { Profile } from '@/shared/auth/types/profile';
 
 type AuthState = {
-  user: SessionUser | null;
-  hydrated: boolean; // 초기 1회 주입(Hydration) 여부
-  setUser: (u: SessionUser | null) => void;
+  supabaseUser: SessionUser | null; // Renamed from 'user' to 'supabaseUser'
+  profile: Profile | null;
+  hydrated: boolean;
+  setSupabaseUser: (user: SessionUser | null) => void; // Renamed from 'setUser'
+  setProfile: (profile: Profile | null) => void;
   markHydrated: () => void;
   reset: () => void;
 };
 
 export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
+  supabaseUser: null,
+  profile: null,
   hydrated: false,
-  setUser: (u) => set({ user: u }),
+  setSupabaseUser: (user) => set({ supabaseUser: user }),
+  setProfile: (profile) => set({ profile }),
   markHydrated: () => set({ hydrated: true }),
-  reset: () => set({ user: null, hydrated: false }),
+  reset: () => set({ supabaseUser: null, profile: null, hydrated: false }),
 }));
+
+// --- 타입 재사용 ---
+// Keep these exports as they are used elsewhere
+export type { SessionUser } from '@/shared/auth/types/sessionUser';
+export type { Role } from '@/shared/auth/types/role';
+export type { Profile } from '@/shared/auth/types/profile';

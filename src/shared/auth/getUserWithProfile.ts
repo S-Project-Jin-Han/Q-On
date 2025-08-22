@@ -1,26 +1,22 @@
 import 'server-only';
 import { supabaseServerClient } from '@/shared/lib/supabase/supabase-server';
 import { Role } from '@/shared/auth/types/role';
-import type { SessionUser } from '@/shared/auth/types/sessionUser';
+import type { SessionUser } from '@/shared/auth/types/sessionUser'; // This is now Supabase User
+import type { Profile } from '@/shared/auth/types/profile';
 
 /**
  * Next.js 서버에서 세션 사용자(auth.user) + RLS 기반 profiles를 조합해 유저 정보를 반환합니다.
  * 비로그인 상태일 경우 "게스트용 안전 폴백"을 반환합니다(빈 uuid, role=undefined, isOnboarding=false).
  */
-export async function getUserWithProfile(): Promise<SessionUser> {
+export async function getUserWithProfile(): Promise<{ supabaseUser: SessionUser | null; profile: Profile | null }> {
   const supabase = await supabaseServerClient();
 
   // 1) 세션 확인 (비로그인 조기 반환)
   const { data: u, error: authErr } = await supabase.auth.getUser();
   if (authErr || !u?.user) {
     return {
-      isLoggedIn: false,
-      uuid: '',
-      email: undefined,
-      name: null,
-      avatarUrl: null,
-      role: undefined,
-      isOnboarding: false,
+      supabaseUser: null,
+      profile: null,
     };
   }
 
@@ -36,13 +32,8 @@ export async function getUserWithProfile(): Promise<SessionUser> {
   // 3) 에러/미존재 → 안전 폴백
   if (profErr || !profile) {
     return {
-      isLoggedIn: true,
-      uuid: userId,
-      email: undefined,
-      name: null,
-      avatarUrl: null,
-      role: undefined,
-      isOnboarding: false,
+      supabaseUser: u.user, // Return the Supabase User even if profile is not found
+      profile: null,
     };
   }
 
@@ -50,13 +41,15 @@ export async function getUserWithProfile(): Promise<SessionUser> {
   const role = (profile.role ?? undefined) as Role;
 
   return {
-    isLoggedIn: true,
-    uuid: profile.uuid,
-    email: profile.email,
-    name: profile.name,
-    avatarUrl: profile.avatarUrl,
-    role,
-    isOnboarding: !!profile.isOnboarding,
-    createdAt: profile.createdAt ?? undefined,
+    supabaseUser: u.user,
+    profile: {
+      uuid: profile.uuid,
+      email: profile.email,
+      name: profile.name,
+      avatarUrl: profile.avatarUrl,
+      role,
+      isOnboarding: !!profile.isOnboarding,
+      createdAt: profile.createdAt ?? undefined,
+    },
   };
 }
