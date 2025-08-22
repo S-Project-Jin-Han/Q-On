@@ -1,14 +1,21 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useAuthStore, type SessionUser, type Profile } from '@/shared/store/authStore';
+import {
+  useAuthStore,
+  type SessionUser,
+  type Profile,
+} from '@/shared/store/authStore';
 import { supabaseBrowser } from '@/shared/lib/supabase/supabase-browser';
 
 // Update Props type
-type Props = { initialUser: { supabaseUser: SessionUser | null; profile: Profile | null } };
+type Props = {
+  initialUser: { supabaseUser: SessionUser | null; profile: Profile | null };
+};
 
 export function AuthHydrator({ initialUser }: Props) {
-  const { hydrated, setSupabaseUser, setProfile, markHydrated } = useAuthStore();
+  const { hydrated, setSupabaseUser, setProfile, markHydrated } =
+    useAuthStore();
 
   // 최초 1회 서버 스냅샷을 주입 (HMR/중복 방지)
   useEffect(() => {
@@ -43,7 +50,7 @@ export function AuthHydrator({ initialUser }: Props) {
           setSupabaseUser(data.user ?? null);
           setProfile(data.profile ?? null);
         } catch (error) {
-          console.error("Error fetching user or profile:", error);
+          console.error('Error fetching user or profile:', error);
         }
       }
     });
@@ -64,7 +71,7 @@ export function AuthHydrator({ initialUser }: Props) {
       sub.subscription.unsubscribe();
       try {
         bc?.close();
-      }
+      } catch {}
     };
   }, [setSupabaseUser, setProfile]);
 
