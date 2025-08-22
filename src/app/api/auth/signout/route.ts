@@ -1,6 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { cookies } from 'next/headers';
-import { createServerClient } from '@supabase/ssr';
 import { supabaseServerClient } from '@/shared/lib/supabase/supabase-server';
 
 export async function POST(req: NextRequest) {
