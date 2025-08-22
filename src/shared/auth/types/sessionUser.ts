@@ -1,12 +1,3 @@
-import type { Role } from './role';
+import type { User } from '@supabase/supabase-js';
 
-export type SessionUser = {
-  isLoggedIn: boolean;
-  uuid: string;
-  email?: string | null;
-  name?: string | null;
-  avatarUrl?: string | null;
-  role: Role;
-  isOnboarding: boolean;
-  createdAt?: string;
-};
+export type SessionUser = User;
