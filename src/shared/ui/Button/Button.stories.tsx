@@ -22,7 +22,7 @@ const meta: Meta<typeof Button> = {
       options: ['default', 'sm', 'lg', 'icon'],
     },
     asChild: {
-      control: { type: 'boolean' },
+      control: false,
     },
   },
 };
@@ -71,6 +71,20 @@ export const Link: Story = {
     children: 'Link Button',
     variant: 'link',
   },
+};
+
+export const AsChildLink: Story = {
+  args: {
+    variant: 'link',
+    asChild: true,
+  },
+  render: (args) => (
+    <Button {...args}>
+      <a href="#" onClick={(e) => e.preventDefault()}>
+        Anchor as child
+      </a>
+    </Button>
+  ),
 };
 
 export const Small: Story = {
