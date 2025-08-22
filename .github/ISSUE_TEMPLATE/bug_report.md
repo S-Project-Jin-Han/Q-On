@@ -2,7 +2,7 @@
 name: 버그 리포트
 about: 버그를 신고하여 프로젝트 개선에 도움을 주세요
 title: '[Bug]'
-labels: 'bug'
+labels: '버그 Bug'
 assignees: ''
 ---
 
