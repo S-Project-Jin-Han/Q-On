@@ -1,5 +1,5 @@
 ---
-name: '📄 문서화 (Documentation)'
+name: '문서화 (Documentation)'
 title: '[DOCS] '
 labels: '문서화 Docs'
 assignees: ''

@@ -7,7 +7,7 @@ import { supabaseServerClient } from '@/shared/lib/supabase/supabase-server';
  * 1. URL 쿼리스트링에서 `code`를 추출.
  * 2. Supabase의 `exchangeCodeForSession`을 호출하여 인증 코드를 세션으로 교환.
  * 3. 인증 성공 후 `profiles` 테이블에서 유저 프로필을 조회.
- *    - `isOnboarding: true` → `/onboarding`으로 리다이렉트
+ *    - `isOnboarding: true` → `/login/onboarding`으로 리다이렉트
  *    - `isOnboarding: false` → `/` 메인 페이지로 리다이렉트
  * 4. 인증 실패 또는 예외 발생 시 `/login`으로 리다이렉트
  */
@@ -30,11 +30,11 @@ export async function GET(request: NextRequest) {
 
       if (profileError || !profile) {
         // 프로필이 없거나 조회 실패 시 로그인 페이지로
-        return NextResponse.redirect(`${origin}/login/onboarding`);
+        return NextResponse.redirect(`${origin}/login`);
       }
 
       if (profile.isOnboarding) {
-        return NextResponse.redirect(`${origin}/onboarding`);
+        return NextResponse.redirect(`${origin}/login/onboarding`);
       }
 
       return NextResponse.redirect(`${origin}`);
