@@ -1,8 +1,8 @@
 import 'server-only';
 import { supabaseServerClient } from '@/shared/lib/supabase/supabase-server';
-import { Role } from '@/shared/auth/types/role';
-import type { SessionUser } from '@/shared/auth/types/sessionUser'; // This is now Supabase User
-import type { Profile } from '@/shared/auth/types/profile';
+import { Role } from '@/shared/auth/types/role.types';
+import type { SessionUser } from '@/shared/auth/types';
+import type { Profile } from '@/shared/auth/types/profile.types';
 
 /**
  * Next.js RLS 기반 profiles 테이블의 유저 정보를 반환합니다.

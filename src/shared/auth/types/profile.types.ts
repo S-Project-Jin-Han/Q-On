@@ -1,4 +1,4 @@
-import type { Role } from './role';
+import type { Role } from './role.types';
 
 export type Profile = {
   uuid: string;

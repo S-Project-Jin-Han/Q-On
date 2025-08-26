@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
-import type { Role } from '@/shared/auth/types/role';
+import type { Role } from '@/shared/auth/types/role.types';
 import { envServer } from '@/shared/lib/env.server';
 
 /** 공개 경로: 루트, 로그인, /public/** */

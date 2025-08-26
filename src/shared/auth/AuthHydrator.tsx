@@ -1,11 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import {
-  useAuthStore,
-  type SessionUser,
-  type Profile,
-} from '@/shared/store/authStore';
+import { useAuthStore } from '@/shared/store/authStore';
+import type { SessionUser, Profile } from '@/shared/auth/types';
 import { supabaseBrowser } from '@/shared/lib/supabase/supabase-browser';
 
 // Update Props type

@@ -4,8 +4,8 @@ import '@shared/styles/globals.css';
 import { Toaster } from '@shared/ui/Sonner';
 import { AuthHydrator } from '@/shared/auth/AuthHydrator';
 import { getUserWithProfile } from '@/shared/auth/getUserWithProfile'; // Import the updated function
-import type { SessionUser } from '@/shared/auth/types/sessionUser';
-import type { Profile } from '@/shared/auth/types/profile';
+import type { SessionUser } from '@/shared/auth/types';
+import type { Profile } from '@/shared/auth/types/profile.types';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
