@@ -1,5 +1,5 @@
 ---
-name: '🧹 기타 작업 (Chore)'
+name: '기타 작업 (Chore)'
 title: '[CHORE] '
 labels: '기타 Chore'
 assignees: ''

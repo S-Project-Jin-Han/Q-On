@@ -1,5 +1,5 @@
 ---
-name: '✨ 기능 구현 (Feature Request)'
+name: '기능 구현 (Feature Request)'
 title: '[FEAT] '
 labels: '기능 구현 Feat'
 assignees: ''

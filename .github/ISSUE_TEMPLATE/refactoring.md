@@ -1,5 +1,5 @@
 ---
-name: '🛠️ 리팩토링 (Refactoring)'
+name: '리팩토링 (Refactoring)'
 title: '[REFACTOR] '
 labels: '리팩토링 Refactor'
 assignees: ''

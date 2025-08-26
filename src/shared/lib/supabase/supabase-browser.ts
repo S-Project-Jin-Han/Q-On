@@ -1,5 +1,5 @@
 import { createBrowserClient } from '@supabase/ssr';
-import { env } from '@/shared/lib/env';
+import { env } from '@/shared/lib/env/env.client';
 
 export const supabaseBrowser = createBrowserClient(
   env.NEXT_PUBLIC_SUPABASE_URL,
