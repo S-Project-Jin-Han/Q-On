@@ -5,10 +5,13 @@ import type { SessionUser } from '@/shared/auth/types/sessionUser'; // This is n
 import type { Profile } from '@/shared/auth/types/profile';
 
 /**
- * Next.js 서버에서 세션 사용자(auth.user) + RLS 기반 profiles를 조합해 유저 정보를 반환합니다.
+ * Next.js RLS 기반 profiles 테이블의 유저 정보를 반환합니다.
  * 비로그인 상태일 경우 "게스트용 안전 폴백"을 반환합니다(빈 uuid, role=undefined, isOnboarding=false).
  */
-export async function getUserWithProfile(): Promise<{ supabaseUser: SessionUser | null; profile: Profile | null }> {
+export async function getUserWithProfile(): Promise<{
+  supabaseUser: SessionUser | null;
+  profile: Profile | null;
+}> {
   const supabase = await supabaseServerClient();
 
   // 1) 세션 확인 (비로그인 조기 반환)
@@ -32,7 +35,7 @@ export async function getUserWithProfile(): Promise<{ supabaseUser: SessionUser 
   // 3) 에러/미존재 → 안전 폴백
   if (profErr || !profile) {
     return {
-      supabaseUser: u.user, // Return the Supabase User even if profile is not found
+      supabaseUser: u.user,
       profile: null,
     };
   }
