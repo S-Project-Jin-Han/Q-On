@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import '@shared/styles/globals.css';
 import { Toaster } from '@shared/ui/Sonner';
 import { AuthHydrator } from '@/shared/auth/AuthHydrator';
-import { getUserWithProfile } from '@/shared/auth/getUserWithProfile'; // Import the updated function
+import { getUserWithProfile } from '@/shared/auth/getUserWithProfile';
 import type { SessionUser } from '@/shared/auth/types';
 import type { Profile } from '@/shared/auth/types/profile.types';
 

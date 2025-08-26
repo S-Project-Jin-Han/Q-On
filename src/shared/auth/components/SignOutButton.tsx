@@ -12,7 +12,7 @@ type Props = {
 };
 
 export default function SignOutButton({
-  scope = 'local',
+  scope: _scope = 'local',
   refreshServerUI = false,
   className,
   children = '로그아웃',
@@ -50,7 +50,7 @@ export default function SignOutButton({
     if (refreshServerUI) router.refresh();
 
     setPending(false);
-  }, [pending, reset, scope, refreshServerUI, router]);
+  }, [pending, reset, refreshServerUI, router]);
 
   return (
     <button

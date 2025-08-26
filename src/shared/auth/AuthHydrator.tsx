@@ -43,8 +43,9 @@ export function AuthHydrator({ initialUser }: Props) {
             cache: 'no-store',
             credentials: 'include',
           });
+
           const data = await res.json();
-          setSupabaseUser(data.user ?? null);
+          setSupabaseUser(data.supabaseUser ?? null);
           setProfile(data.profile ?? null);
         } catch (error) {
           console.error('Error fetching user or profile:', error);
